@@ -248,6 +248,9 @@ public class CharacterController2D : MonoBehaviour {
 			// freeze the player
 			FreezeMotion();
 
+            // vibrate the device
+            Handheld.Vibrate();
+
 			// play the death animation
 			_animator.SetTrigger("Death");
 			
