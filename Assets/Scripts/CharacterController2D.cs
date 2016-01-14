@@ -31,11 +31,12 @@ public class CharacterController2D : MonoBehaviour {
 	public AudioClip fallSFX;
 	public AudioClip jumpSFX;
 	public AudioClip victorySFX;
+    public AudioClip life;
 
-	// private variables below
+    // private variables below
 
-	// store references to components on the gameObject
-	Transform _transform;
+    // store references to components on the gameObject
+    Transform _transform;
 	Rigidbody2D _rigidbody;
 	Animator _animator;
 	AudioSource _audio;
@@ -55,6 +56,7 @@ public class CharacterController2D : MonoBehaviour {
 
 	// number of layer that Platforms are on (setup in Awake)
 	int _platformLayer;
+    int _fplatformLayer;
 	
 	void Awake () {
 		// get a reference to the components we are going to be changing and store a reference for efficiency purposes
@@ -80,7 +82,10 @@ public class CharacterController2D : MonoBehaviour {
 
 		// determine the platform's specified layer
 		_platformLayer = LayerMask.NameToLayer("Platform");
-	}
+
+        // determine the falling platform's specified layer
+        _fplatformLayer = LayerMask.NameToLayer("FallingPlatform");
+    }
 
 	// this is where most of the player controller magic happens each game event loop
 	void Update()
@@ -146,8 +151,9 @@ public class CharacterController2D : MonoBehaviour {
 		// if moving up then don't collide with platform layer
 		// this allows the player to jump up through things on the platform layer
 		// NOTE: requires the platforms to be on a layer named "Platform"
-		Physics2D.IgnoreLayerCollision(_playerLayer, _platformLayer, (_vy > 0.0f)); 
-	}
+		Physics2D.IgnoreLayerCollision(_playerLayer, _platformLayer, (_vy > 0.0f));
+        Physics2D.IgnoreLayerCollision(_playerLayer, _fplatformLayer, (_vy > 0.0f));
+    }
 
 	// Checking to see if the sprite should be flipped
 	// this is done in LateUpdate since the Animator may override the localScale
@@ -218,7 +224,7 @@ public class CharacterController2D : MonoBehaviour {
             GameObject.Find("Main Camera").GetComponent<UnityStandardAssets._2D.Camera2DFollow>().ShakeCamera(0.1f, 0.15f);
 
             if (playerHealth <= 0) { // player is now dead, so start dying
-				PlaySound(deathSFX);
+				//PlaySound(deathSFX);
                 StartCoroutine (KillPlayer ());
 			}
 		}
@@ -272,6 +278,14 @@ public class CharacterController2D : MonoBehaviour {
 			GameManager.gm.AddPoints(amount);
 	}
 
+    public void CollectLife()
+    {
+        PlaySound(life);
+
+        if (GameManager.gm) // add the points through the game manager, if it is available
+            GameManager.gm.AddLife();
+    }
+
 	// public function on victory over the level
 	public void Victory() {
 		PlaySound(victorySFX);
@@ -289,7 +303,7 @@ public class CharacterController2D : MonoBehaviour {
 		_transform.parent = null;
 		_transform.position = spawnloc;
 		_animator.SetTrigger("Respawn");
-	}
+    }
 
     public void EnemyBounce()
     {

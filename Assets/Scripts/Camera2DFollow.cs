@@ -82,7 +82,6 @@ namespace UnityStandardAssets._2D
 
             if (shakeTimer >= 0)
             {
-                Debug.Log("Trying to Shake Camera");
                 Vector2 shakePos = Random.insideUnitCircle * shakeAmount;
                 transform.position = new Vector3(transform.position.x + shakePos.x, transform.position.y + shakePos.y, transform.position.z);
 
@@ -92,7 +91,6 @@ namespace UnityStandardAssets._2D
 
         public void ShakeCamera(float shakePwr, float shakeDur)
         {
-            Debug.Log("Inside Shake Camera");
             shakeAmount = shakePwr;
             shakeTimer = shakeDur;
         }

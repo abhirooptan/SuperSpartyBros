@@ -28,8 +28,10 @@ public class GameManager : MonoBehaviour {
 	GameObject _player;
 	Vector3 _spawnLocation;
 
-	// set things up here
-	void Awake () {
+    GameObject[] fallingPlatforms;
+
+    // set things up here
+    void Awake () {
 		// setup reference to game manager
 		if (gm == null)
 			gm = this.GetComponent<GameManager>();
@@ -64,8 +66,10 @@ public class GameManager : MonoBehaviour {
 		// get initial _spawnLocation based on initial position of player
 		_spawnLocation = _player.transform.position;
 
-		// if levels not specified, default to current level
-		if (levelAfterVictory=="") {
+        fallingPlatforms = GameObject.FindGameObjectsWithTag("FallingPlatform");
+
+        // if levels not specified, default to current level
+        if (levelAfterVictory=="") {
 			Debug.LogWarning("levelAfterVictory not specified, defaulted to current level");
 			levelAfterVictory = Application.loadedLevelName;
 		}
@@ -144,8 +148,16 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 
-	// public function to remove player life and reset game accordingly
-	public void ResetGame() {
+    // public function to add life and update the gui and player prefs accordingly
+    public void AddLife()
+    {
+        // increase score
+        lives ++;
+        refreshGUI();
+    }
+
+    // public function to remove player life and reset game accordingly
+    public void ResetGame() {
 		// remove life and update GUI
 		lives--;
 		refreshGUI();
@@ -158,7 +170,11 @@ public class GameManager : MonoBehaviour {
 			Application.LoadLevel (levelAfterGameOver);
 		} else { // tell the player to respawn
 			_player.GetComponent<CharacterController2D>().Respawn(_spawnLocation);
-		}
+            for(int i = 0; i < fallingPlatforms.Length; i++)
+            {
+                fallingPlatforms[i].GetComponent<FallingPlatform>().isPlayerTouching = false;
+            }
+        }
 	}
 
 	// public function for level complete
