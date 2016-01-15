@@ -249,8 +249,10 @@ public class CharacterController2D : MonoBehaviour {
 			FreezeMotion();
 
             // vibrate the device
-            if(Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer)
+            #if UNITY_ANDROID || UNITY_IOS
                 Handheld.Vibrate();
+            #endif
+            
 
 			// play the death animation
 			_animator.SetTrigger("Death");
