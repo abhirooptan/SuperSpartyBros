@@ -24,6 +24,7 @@ public class CharacterController2D : MonoBehaviour {
 	[HideInInspector]
 	public bool playerCanMove = true;
     public bool sloMo = false;
+    public bool showDialogue = false;
 
 	// SFXs
 	public AudioClip coinSFX;
@@ -93,6 +94,11 @@ public class CharacterController2D : MonoBehaviour {
 		// exit update if player cannot move or game is paused
 		if (!playerCanMove || (Time.timeScale == 0f))
 			return;
+
+        if (showDialogue)
+            Time.timeScale = 0.0f;
+        else
+            Time.timeScale = 1.0f;
 
         if (sloMo)
             Time.timeScale = 0.3f;
