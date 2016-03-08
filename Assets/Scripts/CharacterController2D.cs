@@ -52,6 +52,10 @@ public class CharacterController2D : MonoBehaviour {
 	bool isRunning = false;
     bool _canDoubleJump = false;
 
+	// time to double jump
+	public float timeToDJ;
+	float tempTimetoDJ;
+
 	// store the layer the player is on (setup in Awake)
 	int _playerLayer;
 
@@ -86,6 +90,8 @@ public class CharacterController2D : MonoBehaviour {
 
         // determine the falling platform's specified layer
         _fplatformLayer = LayerMask.NameToLayer("FallingPlatform");
+
+		tempTimetoDJ = timeToDJ;
     }
 
 	// this is where most of the player controller magic happens each game event loop
@@ -139,11 +145,21 @@ public class CharacterController2D : MonoBehaviour {
 		{
             doJump();
 		}
-        else if(_canDoubleJump && CrossPlatformInputManager.GetButtonDown("Jump")) // can double jump and button pressed then jump
+        /*else if(_canDoubleJump && CrossPlatformInputManager.GetButtonDown("Jump")) // can double jump and button pressed then jump
         {
             doJump();
             _canDoubleJump = false;
-        }
+        }*/
+		else if(_canDoubleJump) // can double jump and button pressed then jump
+		{
+			tempTimetoDJ -= Time.deltaTime;
+
+			if (tempTimetoDJ < 0 && CrossPlatformInputManager.GetButtonDown ("Jump")) {
+				doJump();
+				_canDoubleJump = false;
+				tempTimetoDJ = timeToDJ;
+			}
+		}
 		// If the player stops jumping mid jump and player is not yet falling
 		// then set the vertical velocity to 0 (he will start to fall from gravity)
 		if(CrossPlatformInputManager.GetButtonUp("Jump") && _vy>0f)

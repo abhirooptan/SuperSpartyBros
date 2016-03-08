@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Dialogue : MonoBehaviour {
 
-    bool isActive = false;
+    //bool isActive = false;
 
 	// Use this for initialization
 	void Start () {
