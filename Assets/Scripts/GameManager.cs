@@ -118,7 +118,7 @@ public class GameManager : MonoBehaviour {
 	// refresh all the GUI elements
 	void refreshGUI() {
 		// set the text elements of the UI
-		UIScore.text = "Score: "+score.ToString();
+		UIScore.text = "    : "+score.ToString();
 		UIHighScore.text = "Highscore: "+highscore.ToString ();
 		UILevel.text = Application.loadedLevelName;
 		
@@ -139,7 +139,7 @@ public class GameManager : MonoBehaviour {
 		score+=amount;
 
 		// update UI
-		UIScore.text = "Score: "+score.ToString();
+		UIScore.text = "    : "+score.ToString();
 
 		// if score>highscore then update the highscore UI too
 		if (score>highscore) {
