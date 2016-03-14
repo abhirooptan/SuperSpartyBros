@@ -40,7 +40,7 @@ public class Coin : MonoBehaviour {
 
 			transform.position = Vector3.Lerp (transform.position, worldPoint, 3 * Time.deltaTime);
 
-			if ((worldPoint - transform.position).magnitude < 1) {
+			if ((worldPoint - transform.position).magnitude < 2) {
 				// do the player collect coin thing
 				player.GetComponent<CharacterController2D>().CollectCoin(coinValue);
 
